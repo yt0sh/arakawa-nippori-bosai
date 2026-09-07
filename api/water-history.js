@@ -1,0 +1,1 @@
+export {waterHandler as default} from '../lib/water.mjs';
