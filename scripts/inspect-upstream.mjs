@@ -1,9 +1,4 @@
-// Diagnostic only: fixed official sources, no credentials or arbitrary URLs.
+// Temporary bounded diagnostics for fixed public official endpoints only.
 const base='https://bosai.city.arakawa.tokyo.jp/';
-for(const path of ['common/js/setting.js','common/js/renkei.js','common/js/common.js','common/js/general.js']){
- const url=new URL(path,base).href;
- const r=await fetch(url,{signal:AbortSignal.timeout(20000)});
- const js=await r.text();
- console.log('\nSOURCE',url,'HTTP',r.status,'bytes',js.length);
- console.log('RELEVANT',js.split(/\r?\n/).filter(x=>/JSON_HINANZYO|Hinanzyo|HINANZYO|getJsonRenkeiData|__DATA_LIST|\.json|API_URL|api_url/i.test(x)).map(x=>x.slice(0,3000)).slice(0,35));
-}
+const sources=[base+'common/js/setting.js',base+'common/js/renkei.js',base+'apps/get_json.php?file=renkei_1_hinanzyo.js','https://www1.river.go.jp/cgi-bin/DspWaterData.exe?ID=303041283309040&KIND=9','https://www1.river.go.jp/cgi-bin/DspWaterData.exe?ID=303041283309040&KIND=5','https://www1.river.go.jp/cgi-bin/DspWaterData.exe?ID=303041283309040&KIND=2','https://www1.river.go.jp/dat/dload/download/2930304128330904020260831685883.dat'];
+for(const url of sources){try{const r=await fetch(url,{signal:AbortSignal.timeout(15000)});const text=await r.text();console.log('\nSOURCE',url,'HTTP',r.status,'bytes',text.length,'type',r.headers.get('content-type'));if(url.includes('get_json.php')){let d=JSON.parse(text);console.log('ROOT KEYS',Object.keys(d));console.log('UPDATED',d.Update_At);console.log('FEATURE COUNT',d.Hinanzyo?.features?.length);for(const f of d.Hinanzyo?.features||[]){const a=f?.properties?.attr;if(a&&(/ひぐらし|諏訪台|西日暮里ふれあい|第六日暮里/.test(a.name||'')||['hn100240','hn100340','hn200100','hn200160','hn100230'].includes(a.code)))console.log('FACILITY',JSON.stringify(a));}}else if(url.includes('DspWaterData')){console.log('DOCUMENT',text.slice(0,3500));console.log('LINKS',[...text.matchAll(/(?:href|src)=["']([^"']+)/gi)].map(m=>m[1]).filter(s=>/Water|water|frm|KIND|dload/.test(s)).slice(0,30));}else console.log('DOCUMENT',text.slice(0,7000));}catch(e){console.log('ERROR',url,String(e))}}
