@@ -29,7 +29,7 @@ writeFileSync(indexPath,html);
 
 const stylePath=path.join(out,'style.css');
 let css=readFileSync(stylePath,'utf8');
-css+='\n/* Rainfall readability: strongly fade the grayscale basemap while preserving rainfall colors. */\n.radar{aspect-ratio:1/1}\n.tile.base-tile{filter:grayscale(1) brightness(1.08) contrast(.92);opacity:.10}\n.tile.radar-tile{opacity:.60}\n@media(max-width:440px){.radar{aspect-ratio:1/1}}\n';
+css+='\n/* Rainfall readability: fade the grayscale basemap while preserving rainfall colors. */\n.radar{aspect-ratio:1/1}\n.tile.base-tile{filter:grayscale(1) brightness(1.08) contrast(.92);opacity:.30}\n.tile.radar-tile{opacity:.60}\n@media(max-width:440px){.radar{aspect-ratio:1/1}}\n';
 writeFileSync(stylePath,css);
 
-console.log('Built v0.8 frontend with JMA radar zoom 8, 10% basemap opacity, 60% rainfall opacity and upstream/downstream links.');
+console.log('Built v0.8 frontend with JMA radar zoom 8, 30% basemap opacity, 60% rainfall opacity and upstream/downstream links.');
