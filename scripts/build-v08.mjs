@@ -27,6 +27,9 @@ html=html.replace(
   '地図：国土地理院／降水レイヤー：気象庁「雨雲の動き」',
   '地図：国土地理院（グレースケール・薄表示）／降水レイヤー：気象庁「雨雲の動き」（60%表示）'
 );
+if(!html.includes('https://platform.x.com/widgets.js')){
+  html=html.replace('</body>','<script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>\n</body>');
+}
 writeFileSync(indexPath,html);
 
 const stylePath=path.join(out,'style.css');
