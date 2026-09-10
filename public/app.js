@@ -1,8 +1,8 @@
 const CONFIG={areaCode:'1311800',center:{lat:35.7277,lon:139.7708},radarZoom:12};
 const STATIONS=[
-  {key:'iwabuchi',name:'岩淵水門（上）',location:'東京都北区・荒川下流',id:'303041283309040',riverUrl:'https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=4&ofcCd=21281&obsCd=6&isCurrent=true&fld=0',cameraUrl:'https://www.ktr.mlit.go.jp/arage/arage00563.html'},
+  {key:'kumagaya',name:'熊谷',location:'熊谷市・荒川上流',id:'303041283308030',riverUrl:'https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=4&ofcCd=21280&obsCd=7&isCurrent=true&fld=0',cameraUrl:'https://www.ktr.mlit.go.jp/arajo/live/camera23.html'},
   {key:'chisuibashi',name:'治水橋',location:'さいたま市西区・荒川上流',id:'303041283308060',riverUrl:'https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=4&ofcCd=21280&obsCd=9&isCurrent=true&fld=0',cameraUrl:'https://www.ktr.mlit.go.jp/arajo/live/camera02.html'},
-  {key:'kumagaya',name:'熊谷',location:'熊谷市・荒川上流',id:'303041283308030',riverUrl:'https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=4&ofcCd=21280&obsCd=7&isCurrent=true&fld=0',cameraUrl:'https://www.ktr.mlit.go.jp/arajo/live/camera23.html'}
+  {key:'iwabuchi',name:'岩淵水門',location:'東京都北区・荒川下流',id:'303041283309040',riverUrl:'https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=4&ofcCd=21281&obsCd=6&isCurrent=true&fld=0',cameraUrl:'https://www.ktr.mlit.go.jp/arage/arage00563.html'}
 ];
 const WARNING_NAMES={'03':'大雨警報','04':'洪水警報','05':'暴風警報','06':'大雪警報','07':'波浪警報','08':'高潮警報','10':'大雨注意報','12':'大雪注意報','13':'風雪注意報','14':'雷注意報','15':'強風注意報','16':'波浪注意報','17':'融雪注意報','18':'洪水注意報','19':'高潮注意報','20':'濃霧注意報','21':'乾燥注意報','22':'なだれ注意報','23':'低温注意報','24':'霜注意報','25':'着氷注意報','26':'着雪注意報','32':'暴風雪警報'};
 const WARNING_CODES=new Set(['03','04','05','06','07','08','32']);
@@ -26,7 +26,7 @@ function stationCard(st){
   return a
 }
 function initStations(){q('#waterStations').replaceChildren(...STATIONS.map(stationCard))}
-let chartHours=12;
+let chartHours=120;
 const waterData=new Map();
 function bandFor(v,t){return v>=t.danger?'danger':v>=t.evacuation?'evacuation':v>=t.advisory?'advisory':v>=t.standby?'standby':'normal'}
 function bandName(k){return {normal:'平常',standby:'水防団待機',advisory:'氾濫注意',evacuation:'避難判断',danger:'氾濫危険'}[k]}
@@ -101,7 +101,7 @@ function tileXY(lat,lon,z){const n=2**z,r=lat*Math.PI/180;return{x:(lon+180)/360
 function tile(parent,src,dx,dy,cls){const im=document.createElement('img');im.className='tile '+cls;im.alt='';im.loading='eager';im.style.left=((dx+1)*33.3334)+'%';im.style.top=((dy+1)*33.3334)+'%';im.src=src;parent.append(im);return im}
 async function updateRadar(r){
   const box=q('#radar'),err=q('#radarError');
-  if(!r||r.state!=='ok'){err.style.display='flex';q('#radarLabel').textContent='雨雲データを取得できません';return}
+  if(!r||r.state!=='ok'){err.style.display='flex';q('#radarLabel').textContent='降水レイヤーを取得できません';return}
   const z=CONFIG.radarZoom,p=tileXY(CONFIG.center.lat,CONFIG.center.lon,z),cx=Math.floor(p.x),cy=Math.floor(p.y),old=qa('#radar .tile'),added=[];let radarFail=0,baseFail=0;
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=cx+dx,y=cy+dy;
     const base=tile(box,`https://cyberjapandata.gsi.go.jp/xyz/std/${z}/${x}/${y}.png`,dx,dy,'base-tile');
@@ -109,7 +109,7 @@ async function updateRadar(r){
   }
   await Promise.all(added.map(([im,kind])=>new Promise(resolve=>{let done=false;const finish=ok=>{if(done)return;done=true;if(!ok){if(kind==='radar')radarFail++;else baseFail++}resolve()};im.onload=()=>finish(true);im.onerror=()=>finish(false);setTimeout(()=>finish(!!im.naturalWidth),8000)})));
   old.forEach(x=>x.remove());err.style.display=radarFail===9?'flex':'none';q('#radarMarker').style.left=((1+p.x-cx)/3*100)+'%';q('#radarMarker').style.top=((1+p.y-cy)/3*100)+'%';
-  q('#radarLabel').textContent='荒川区周辺｜'+fmt(r.timestamp)+(radarFail?'｜雨雲 一部取得失敗':'')+(baseFail?'｜地図 一部取得失敗':'')
+  q('#radarLabel').textContent='気象庁 降水レイヤー｜'+fmt(r.timestamp)+(radarFail?'｜一部取得失敗':'')+(baseFail?'｜地図 一部取得失敗':'')
 }
 async function loadJma(){
   try{const d=await jsonFetch('/api/jma',15000);updateWarning(d.warning);updateForecast(d.forecast);await updateRadar(d.radar)}catch{updateWarning(null);updateForecast(null);await updateRadar(null)}
