@@ -24,10 +24,10 @@ test('v0.8 frontend uses requested links, defaults to five days, and orders stat
   assert.match(html,/洪水キキクル/);
   assert.match(html,/表示期間切り替え/);assert.match(html,/data-range="120" class="active"/);
   assert.match(html,/arajo\/index\.html/);assert.match(html,/arage\/index\.html/);assert.match(html,/river\.go\.jp\/index\/twninfo/);
-  assert.match(html,/国土地理院（グレースケール）/);
+  assert.match(html,/国土地理院（グレースケール）/);assert.match(html,/70%表示/);
   assert.match(html,/keisei\.co\.jp\/traininfo\/index\.php/);assert.match(html,/kotsu\.metro\.tokyo\.jp\/subway\//);
   assert.ok(app.indexOf("key:'kumagaya'")<app.indexOf("key:'chisuibashi'")&&app.indexOf("key:'chisuibashi'")<app.indexOf("key:'iwabuchi'"));
-  assert.match(app,/let chartHours=120/);assert.match(app,/radarZoom:10/);assert.match(app,/\/api\/radar-tile/);
-  assert.match(css,/filter:grayscale\(1\)/);assert.match(css,/\.radar\{aspect-ratio:1\/1\}/);
+  assert.match(app,/let chartHours=120/);assert.match(app,/radarZoom:8/);assert.match(app,/\/api\/radar-tile/);
+  assert.match(css,/filter:grayscale\(1\)/);assert.match(css,/\.tile\.radar-tile\{opacity:\.70\}/);assert.match(css,/\.radar\{aspect-ratio:1\/1\}/);
   assert(!html.includes('id="shelters"'));assert(!html.includes('id="utilities"'))
 });
