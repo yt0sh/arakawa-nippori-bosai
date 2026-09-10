@@ -28,7 +28,7 @@ test('v0.8 frontend has live flood indicator, one weather card and four official
   assert.match(html,/id="floodStatus"/);assert.match(html,/荒川｜氾濫情報/);assert.match(html,/flood-forecast\.js/);
   assert(!html.includes('class="card forecast-card"'));
   for(const handle of ['Kantei_Saigai','tokyo_bousai','arakawakukoho','mlit_arakawa_ka'])assert.match(html,new RegExp('x\\.com/'+handle));
-  assert.equal((html.match(/class="twitter-timeline"/g)||[]).length,4);
+  assert.equal((html.match(/class="twitter-timeline"/g)||[]).length,4);assert.match(html,/platform\.x\.com\/widgets\.js/);
   assert.match(html,/keisei\.co\.jp\/traininfo\/index\.php/);assert.match(html,/kotsu\.metro\.tokyo\.jp\/subway\//);
   assert.ok(app.indexOf("key:'kumagaya'")<app.indexOf("key:'chisuibashi'")&&app.indexOf("key:'chisuibashi'")<app.indexOf("key:'iwabuchi'"));
   assert.match(app,/let chartHours=120/);assert.match(app,/radarZoom:8/);assert.match(app,/\/api\/radar-tile/);
