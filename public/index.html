@@ -37,10 +37,11 @@
       <a class="source-link" href="https://bosai.city.arakawa.tokyo.jp/hinan/hinan-siji.html" target="_blank" rel="noopener noreferrer">荒川区｜発令区域 →</a>
     </article>
 
-    <article class="status-card">
-      <h2>荒川の洪水予報</h2>
-      <div class="status-main"><i class="dot"></i><span>公式発表を確認</span></div>
-      <div class="status-detail">洪水予報は複数の観測所・予測を踏まえて発表されます。単一地点の水位だけでは判定しません。</div>
+    <article class="status-card" id="floodForecastCard">
+      <h2>荒川｜氾濫情報</h2>
+      <div class="status-main"><i id="floodDot" class="dot"></i><span id="floodStatus">取得中</span></div>
+      <div class="status-detail" id="floodDetail">指定河川洪水予報の発表状況を確認中</div>
+      <small class="source-time" id="floodTime"></small>
       <a class="source-link" href="https://www.jma.go.jp/bosai/flood/" target="_blank" rel="noopener noreferrer">気象庁｜指定河川洪水予報 →</a>
     </article>
   </section>
@@ -72,11 +73,11 @@
     <div class="section-heading">
       <div>
         <h2>荒川区の天気・雨雲</h2>
-        <p>雨雲の動きと短期予報を水位とは分けて確認</p>
+        <p>現在の降水域を広域で確認</p>
       </div>
       <a class="section-link" href="https://www.jma.go.jp/bosai/#pattern=default&amp;area_type=class20s&amp;area_code=1311800" target="_blank" rel="noopener noreferrer">気象庁｜荒川区の天気 →</a>
     </div>
-    <div class="weather-grid">
+    <div class="weather-grid single">
       <article class="card radar-card">
         <h3>荒川区周辺の雨雲</h3>
         <div class="kicker">地図：国土地理院／降水レイヤー：気象庁「雨雲の動き」</div>
@@ -85,25 +86,14 @@
           <span class="radar-label" id="radarLabel">降水レイヤー取得中</span>
           <div class="radar-error" id="radarError">雨雲画像を取得できません。気象庁の公式画面を確認してください。</div>
         </div>
-        <div class="micro">ここで重ねているのは雲量の衛星画像ではなく、気象庁の降水強度レイヤーです。降水がない場所は透明になり、地図だけが見えます。</div>
+        <div class="micro">背景地図はグレースケールで薄く表示し、気象庁の降水強度レイヤーを重ねています。降水がない場所は透明になります。</div>
         <div class="btnrow">
           <a class="btn primary" href="https://www.jma.go.jp/bosai/nowc/" target="_blank" rel="noopener noreferrer">気象庁｜雨雲の動き</a>
           <a class="btn" href="https://www.jma.go.jp/bosai/risk/#zoom:12/lat:35.732021/lon:139.785919/colordepth:normal/elements:flood" target="_blank" rel="noopener noreferrer">洪水キキクル</a>
         </div>
       </article>
-
-      <article class="card forecast-card">
-        <h3>東京地方の短期予報</h3>
-        <div id="forecastText" class="forecast-main">取得中</div>
-        <div id="forecastPop" class="forecast-pop"></div>
-        <div class="weather-links">
-          <a href="https://www.jma.go.jp/bosai/#pattern=default&amp;area_type=class20s&amp;area_code=1311800" target="_blank" rel="noopener noreferrer">荒川区の天気</a>
-          <a href="https://www.jma.go.jp/bosai/warning/#area_type=class20s&amp;area_code=1311800" target="_blank" rel="noopener noreferrer">警報・注意報</a>
-          <a href="https://www.jma.go.jp/bosai/flood/" target="_blank" rel="noopener noreferrer">指定河川洪水予報</a>
-        </div>
-        <div class="micro">雨量・水位・洪水予報は別の情報です。強い雨が見えても、避難情報は公式発表を確認してください。</div>
-      </article>
     </div>
+    <div hidden aria-hidden="true"><span id="forecastText"></span><span id="forecastPop"></span></div>
   </section>
 
   <section class="section-block compact-section">
@@ -148,29 +138,37 @@
   <section class="section-block secondary-section">
     <div class="section-heading">
       <div>
-        <h2>現地情報・SNS</h2>
-        <p>公式情報を補う参考情報。未確認情報を含みます。</p>
+        <h2>SNS</h2>
+        <p>災害時に確認したい公的機関のX公式アカウント</p>
       </div>
     </div>
-    <div class="feed-grid">
-      <article class="card">
-        <h3>公式Xリスト</h3>
-        <div id="xFeed" class="x-feed">
-          <a class="twitter-timeline" data-height="390" data-chrome="noheader nofooter" href="https://x.com/i/lists/2096589731018727819">荒川区・日暮里 防災リスト</a>
-          <p>表示されない場合は直接開いてください。</p>
-        </div>
-        <a class="source-link" href="https://x.com/i/lists/2096589731018727819" target="_blank" rel="noopener noreferrer">Xリストを開く →</a>
+    <div class="social-grid">
+      <article class="card social-card">
+        <h3>首相官邸（災害・危機管理情報）</h3>
+        <a class="twitter-timeline" data-height="430" data-chrome="noheader nofooter noborders transparent" href="https://x.com/Kantei_Saigai">@Kantei_Saigai</a>
+        <a class="source-link" href="https://x.com/Kantei_Saigai" target="_blank" rel="noopener noreferrer">Xで開く →</a>
       </article>
-      <article class="card">
-        <h3>地域の現地情報</h3>
-        <p class="secondary-copy">LINEオープンチャットなどの住民情報。公式発表の代わりには使わず、現地の補助情報として確認します。</p>
-        <a class="btn primary" href="https://sites.google.com/view/tp19-nippori/" target="_blank" rel="noopener noreferrer">既存サイトの案内を開く</a>
+      <article class="card social-card">
+        <h3>東京都防災</h3>
+        <a class="twitter-timeline" data-height="430" data-chrome="noheader nofooter noborders transparent" href="https://x.com/tokyo_bousai">@tokyo_bousai</a>
+        <a class="source-link" href="https://x.com/tokyo_bousai" target="_blank" rel="noopener noreferrer">Xで開く →</a>
+      </article>
+      <article class="card social-card">
+        <h3>荒川区</h3>
+        <a class="twitter-timeline" data-height="430" data-chrome="noheader nofooter noborders transparent" href="https://x.com/arakawakukoho">@arakawakukoho</a>
+        <a class="source-link" href="https://x.com/arakawakukoho" target="_blank" rel="noopener noreferrer">Xで開く →</a>
+      </article>
+      <article class="card social-card">
+        <h3>国土交通省 荒川下流河川事務所</h3>
+        <a class="twitter-timeline" data-height="430" data-chrome="noheader nofooter noborders transparent" href="https://x.com/mlit_arakawa_ka">@mlit_arakawa_ka</a>
+        <a class="source-link" href="https://x.com/mlit_arakawa_ka" target="_blank" rel="noopener noreferrer">Xで開く →</a>
       </article>
     </div>
   </section>
 
-  <footer class="footer">情報源：気象庁・国土交通省・荒川区・国土地理院。取得元の更新遅延や通信障害が起こり得ます。<br>Prototype v0.8 / 2026-09-10。Google Sitesはまだ置き換えません。</footer>
+  <footer class="footer">情報源：気象庁・国土交通省・荒川区・国土地理院。取得元の更新遅延や通信障害が起こり得ます。<br>Prototype v0.8 / 2026-09-11。Google Sitesはまだ置き換えません。</footer>
 </main>
 <script src="/app.js?v=0.8.0" defer></script>
+<script src="/flood-forecast.js?v=0.8.0" defer></script>
 </body>
 </html>
