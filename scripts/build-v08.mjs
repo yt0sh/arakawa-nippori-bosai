@@ -12,7 +12,7 @@ cpSync(src,out,{recursive:true});
 
 const appPath=path.join(out,'app.js');
 let app=readFileSync(appPath,'utf8');
-app=app.replace("radarZoom:12","radarZoom:10");
+app=app.replace("radarZoom:12","radarZoom:8");
 writeFileSync(appPath,app);
 
 const indexPath=path.join(out,'index.html');
@@ -23,13 +23,13 @@ html=html.replace(
 );
 html=html.replace(
   '地図：国土地理院／降水レイヤー：気象庁「雨雲の動き」',
-  '地図：国土地理院（グレースケール）／降水レイヤー：気象庁「雨雲の動き」'
+  '地図：国土地理院（グレースケール）／降水レイヤー：気象庁「雨雲の動き」（70%表示）'
 );
 writeFileSync(indexPath,html);
 
 const stylePath=path.join(out,'style.css');
 let css=readFileSync(stylePath,'utf8');
-css+='\n/* Rainfall readability: keep the precipitation color scale distinct from the base map. */\n.radar{aspect-ratio:1/1}\n.tile.base-tile{filter:grayscale(1) brightness(1.08) contrast(.92)}\n@media(max-width:440px){.radar{aspect-ratio:1/1}}\n';
+css+='\n/* Rainfall readability: keep precipitation colors distinct while preserving map context. */\n.radar{aspect-ratio:1/1}\n.tile.base-tile{filter:grayscale(1) brightness(1.08) contrast(.92)}\n.tile.radar-tile{opacity:.70}\n@media(max-width:440px){.radar{aspect-ratio:1/1}}\n';
 writeFileSync(stylePath,css);
 
-console.log('Built v0.8 frontend with JMA radar zoom 10, grayscale base map and upstream/downstream links.');
+console.log('Built v0.8 frontend with JMA radar zoom 8, 70% rainfall opacity, grayscale base map and upstream/downstream links.');
