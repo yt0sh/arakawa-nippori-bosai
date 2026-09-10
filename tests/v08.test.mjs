@@ -16,8 +16,8 @@ test('water summary returns selected station metadata and exact deltas',()=>{
   const now=Date.parse('2026-09-10T00:05:00Z'),d=summarizeWater(rows,STATIONS.kumagaya,now);
   assert.equal(d.station.key,'kumagaya');assert.equal(d.latest.value,2.3);assert.equal(d.delta10,.1);assert.equal(d.delta60,.3);assert.equal(d.chartMax,6)
 });
-test('v0.8 frontend has live flood indicator, one weather card and four resilient official X feeds',()=>{
-  const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8'),app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../dist/style.css',import.meta.url),'utf8'),flood=readFileSync(new URL('../dist/flood-forecast.js',import.meta.url),'utf8'),api=readFileSync(new URL('../api/flood-forecast.js',import.meta.url),'utf8');
+test('v0.8 frontend has live flood indicator, one weather card, resilient X feeds and visual link cards',()=>{
+  const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8'),app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../dist/style.css',import.meta.url),'utf8'),flood=readFileSync(new URL('../dist/flood-forecast.js',import.meta.url),'utf8'),api=readFileSync(new URL('../api/flood-forecast.js',import.meta.url),'utf8'),icons=readFileSync(new URL('../dist/card-icons.js',import.meta.url),'utf8'),iconCss=readFileSync(new URL('../dist/card-icons.css',import.meta.url),'utf8');
   assert.match(html,/bosai\/warning\/#area_type=class20s&amp;area_code=1311800/);
   assert.match(html,/pattern=default&amp;area_type=class20s&amp;area_code=1311800/);
   assert.match(html,/risk\/#zoom:12\/lat:35\.732021\/lon:139\.785919\/colordepth:normal\/elements:flood/);
@@ -31,6 +31,10 @@ test('v0.8 frontend has live flood indicator, one weather card and four resilien
   assert.equal((html.match(/class="twitter-timeline"/g)||[]).length,4);assert.match(html,/platform\.x\.com\/widgets\.js/);
   assert.equal((html.match(/class="social-heading-link"/g)||[]).length,4);assert(!html.includes('Xで開く →'));
   assert.match(html,/表示されない場合も、各ヘッダーから公式アカウントを直接開けます/);
+  assert.match(html,/card-icons\.css/);assert.match(html,/card-icons\.js/);
+  for(const mark of ['mark-jr','mark-metro','mark-keisei','mark-toei','mark-electric','mark-gas','mark-water','mark-sewer'])assert.match(icons,new RegExp(mark));
+  assert.match(icons,/JR_East_logo\.svg/);assert.match(icons,/Tokyo_Metro_logo\.svg/);assert.match(icons,/Keisei_Electric_Railway_logo\.svg/);assert.match(icons,/Toei_Transportation_combined_logo\.svg/);
+  assert.match(iconCss,/--mark-opacity/);assert.match(iconCss,/--mark-scale/);assert.match(iconCss,/mark-sewer/);
   assert.match(html,/keisei\.co\.jp\/traininfo\/index\.php/);assert.match(html,/kotsu\.metro\.tokyo\.jp\/subway\//);
   assert.ok(app.indexOf("key:'kumagaya'")<app.indexOf("key:'chisuibashi'")&&app.indexOf("key:'chisuibashi'")<app.indexOf("key:'iwabuchi'"));
   assert.match(app,/let chartHours=120/);assert.match(app,/radarZoom:8/);assert.match(app,/\/api\/radar-tile/);
