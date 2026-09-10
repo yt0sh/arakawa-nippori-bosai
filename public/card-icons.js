@@ -1,5 +1,5 @@
 const LOGOS={
-  'jreast.co.jp':{cls:'mark-jr',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/JR_East_logo.svg',alt:'JR東日本'},
+  'jreast.co.jp':{cls:'mark-jr',src:'https://upload.wikimedia.org/wikipedia/commons/3/30/JR_East_logo.svg',alt:'JR東日本'},
   'tokyometro.jp':{cls:'mark-metro',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Tokyo_Metro_logo.svg',alt:'東京メトロ'},
   'keisei.co.jp':{cls:'mark-keisei',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Keisei_Electric_Railway_logo.svg',alt:'京成電鉄'},
   'kotsu.metro.tokyo.jp':{cls:'mark-toei',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Toei_Transportation_combined_logo.svg',alt:'都営交通'}
