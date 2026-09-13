@@ -1,5 +1,10 @@
 const LOGOS={
-  'jreast.co.jp':{cls:'mark-jr',src:'https://upload.wikimedia.org/wikipedia/commons/3/30/JR_East_logo.svg',alt:'JR東日本'},
+  'jreast.co.jp':{
+    cls:'mark-jr',
+    src:'https://upload.wikimedia.org/wikipedia/commons/3/30/JR_East_logo.svg',
+    fallback:'https://commons.wikimedia.org/wiki/Special:Redirect/file/JR_East_logo.svg',
+    alt:'JR東日本'
+  },
   'tokyometro.jp':{cls:'mark-metro',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Tokyo_Metro_logo.svg',alt:'東京メトロ'},
   'keisei.co.jp':{cls:'mark-keisei',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Keisei_Electric_Railway_logo.svg',alt:'京成電鉄'},
   'kotsu.metro.tokyo.jp':{cls:'mark-toei',src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Toei_Transportation_combined_logo.svg',alt:'都営交通'}
@@ -13,10 +18,24 @@ const ICONS={
 };
 
 function hostOf(link){try{return new URL(link.href).hostname.replace(/^www\./,'')}catch{return''}}
+function configForHost(table,host){
+  for(const [domain,cfg] of Object.entries(table)){
+    if(host===domain||host.endsWith(`.${domain}`))return cfg;
+  }
+  return null;
+}
 function addBrandMark(link,cfg){
   link.classList.add('icon-link-card',cfg.cls);
   const mark=document.createElement('span');mark.className='card-mark brand-mark';mark.setAttribute('aria-hidden','true');
-  const img=document.createElement('img');img.src=cfg.src;img.alt='';img.loading='lazy';img.decoding='async';mark.append(img);link.prepend(mark);
+  const img=document.createElement('img');img.src=cfg.src;img.alt='';img.loading='lazy';img.decoding='async';
+  if(cfg.fallback){
+    img.addEventListener('error',()=>{
+      if(img.dataset.fallbackTried)return;
+      img.dataset.fallbackTried='1';
+      img.src=cfg.fallback;
+    });
+  }
+  mark.append(img);link.prepend(mark);
 }
 function addUtilityMark(link,cfg){
   link.classList.add('icon-link-card',cfg.cls);
@@ -25,6 +44,8 @@ function addUtilityMark(link,cfg){
 
 for(const link of document.querySelectorAll('.link-grid.four a')){
   const host=hostOf(link);
-  if(LOGOS[host])addBrandMark(link,LOGOS[host]);
-  else if(ICONS[host])addUtilityMark(link,ICONS[host]);
+  const logo=configForHost(LOGOS,host);
+  const icon=configForHost(ICONS,host);
+  if(logo)addBrandMark(link,logo);
+  else if(icon)addUtilityMark(link,icon);
 }
