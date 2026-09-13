@@ -17,6 +17,9 @@ writeFileSync(appPath,app);
 
 const indexPath=path.join(out,'index.html');
 let html=readFileSync(indexPath,'utf8');
+html=html.replace('<title>荒川 水害ダッシュボード｜荒川区・日暮里</title>','<title>日暮里・荒川 水害情報ビューア</title>');
+html=html.replace('<h1>荒川 水害ダッシュボード</h1>','<h1>日暮里・荒川 水害情報ビューア</h1>');
+html=html.replace('<p>荒川区・日暮里から、荒川の水位・雨・避難・交通を公式情報で確認</p>','<p>荒川の水位推移・雨雲・避難所・交通情報をひとまとめに</p>');
 if(!html.includes('https://www.ktr.mlit.go.jp/arage/index.html')){
   html=html.replace(
     '<a href="https://www.ktr.mlit.go.jp/arajo/index.html" target="_blank" rel="noopener noreferrer">荒川上流河川事務所</a>',
@@ -63,4 +66,4 @@ let css=readFileSync(stylePath,'utf8');
 css+='\n/* Rainfall readability: fade the grayscale basemap while preserving rainfall colors. */\n.radar{aspect-ratio:1/1}\n.tile.base-tile{filter:grayscale(1) brightness(1.08) contrast(.92);opacity:.30}\n.tile.radar-tile{opacity:.60}\n.weather-grid.single{grid-template-columns:1fr}\n.dot.lv4{background:#8b4cc5;box-shadow:0 0 0 5px #f1e9fb}\n.dot.lv5{background:#151017;box-shadow:0 0 0 5px #eee9ef}\n.social-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}\n.social-card{min-width:0;overflow:hidden}\n.social-card h3{min-height:44px;font-size:13px;line-height:1.35}\n.social-heading-link{text-decoration:none}\n.social-heading-link:hover{text-decoration:underline}\n.social-card .twitter-timeline{display:block;min-height:430px;font-size:11px;color:var(--muted)}\n@media(max-width:1080px){.social-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}\n@media(max-width:620px){.social-grid{grid-template-columns:1fr}}\n@media(max-width:440px){.radar{aspect-ratio:1/1}}\n';
 writeFileSync(stylePath,css);
 
-console.log('Built v0.8 frontend with resilient X embeds, linked SNS headings, live flood indicator, tuned rainfall map and card watermark icons.');
+console.log('Built v0.8 frontend as Nippori-Arakawa flood information viewer with resilient X embeds and tuned data cards.');
