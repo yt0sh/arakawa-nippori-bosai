@@ -34,6 +34,7 @@ test('v0.8 frontend has live flood indicator, one weather card, resilient X feed
   assert.match(html,/card-icons\.css/);assert.match(html,/card-icons\.js/);
   for(const mark of ['mark-jr','mark-metro','mark-keisei','mark-toei','mark-electric','mark-gas','mark-water','mark-sewer'])assert.match(icons,new RegExp(mark));
   assert.match(icons,/JR_East_logo\.svg/);assert.match(icons,/Tokyo_Metro_logo\.svg/);assert.match(icons,/Keisei_Electric_Railway_logo\.svg/);assert.match(icons,/Toei_Transportation_combined_logo\.svg/);
+  assert.match(icons,/host\.endsWith\(`\.\$\{domain\}`\)/);assert.match(icons,/'jreast\.co\.jp'/);assert.match(icons,/fallbackTried/);
   assert.match(iconCss,/--mark-opacity/);assert.match(iconCss,/--mark-scale/);assert.match(iconCss,/mark-sewer/);
   assert.match(html,/keisei\.co\.jp\/traininfo\/index\.php/);assert.match(html,/kotsu\.metro\.tokyo\.jp\/subway\//);
   assert.ok(app.indexOf("key:'kumagaya'")<app.indexOf("key:'chisuibashi'")&&app.indexOf("key:'chisuibashi'")<app.indexOf("key:'iwabuchi'"));
