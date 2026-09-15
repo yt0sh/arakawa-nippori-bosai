@@ -29,7 +29,11 @@ test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards an
   assert.match(html,/id="floodStatus"/);assert.match(html,/気象庁｜荒川の氾濫情報/);assert.match(html,/flood-forecast\.js/);
   const weatherPos=html.indexOf('id="weatherStatus"'),floodPos=html.indexOf('id="floodStatus"'),evacPos=html.indexOf('id="evacStatus"');
   assert.ok(weatherPos>=0&&weatherPos<floodPos&&floodPos<evacPos);
-  assert.equal((html.match(/class="status-watermark"/g)||[]).length,3);
+  assert.equal((html.match(/class="status-card status-visual status-card-link/g)||[]).length,3);
+  assert.equal((html.match(/class="status-watermark/g)||[]).length,3);
+  assert.match(html,/M10\.363 3\.591l-8\.106 13\.534/);assert.match(html,/M3 20\.75a2\.4 2\.4/);
+  assert.match(html,/Safety_evacuation_area\.svg/);assert.match(html,/JIS Z8210、表示色調整/);
+  assert.match(ui,/status-card-link/);assert.match(ui,/status-watermark-image/);assert.match(ui,/grayscale\(1\)/);
   for(const id of ['_dA2jB2NEZw','ec8nY1JZ6zA','pmTFyDvr4l4'])assert.match(html,new RegExp(id));
   for(const tgid of ['226001','226008','203001'])assert.match(html,new RegExp('tgid='+tgid));
   assert.equal((html.match(/youtube-nocookie\.com\/embed\//g)||[]).length,3);assert.equal((html.match(/camera-only-card/g)||[]).length,3);
@@ -41,7 +45,7 @@ test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards an
   assert.match(icons,/JR_East_logo\.svg/);assert.match(icons,/Tokyo_Metro_logo\.svg/);assert.match(icons,/Keisei_Electric_Railway_logo\.svg/);assert.match(icons,/Toei_Transportation_combined_logo\.svg/);
   assert.match(icons,/host\.endsWith\(`\.\$\{domain\}`\)/);assert.match(icons,/'jreast\.co\.jp'/);assert.match(icons,/fallbackTried/);
   assert.match(iconCss,/--mark-opacity/);assert.match(iconCss,/--mark-scale/);assert.match(iconCss,/mark-sewer/);
-  assert.match(ui,/status-watermark/);assert.match(ui,/camera-only-card/);assert.match(ui,/social-profile-card/);assert.match(ui,/filter:grayscale\(1\)/);assert.match(ui,/opacity:\.30/);assert.match(ui,/\.tile\.radar-tile\{opacity:\.60\}/);
+  assert.match(ui,/camera-only-card/);assert.match(ui,/social-profile-card/);assert.match(ui,/filter:grayscale\(1\)/);assert.match(ui,/opacity:\.30/);assert.match(ui,/\.tile\.radar-tile\{opacity:\.60\}/);
   assert.match(html,/keisei\.co\.jp\/traininfo\/index\.php/);assert.match(html,/kotsu\.metro\.tokyo\.jp\/subway\//);
   assert.ok(app.indexOf("key:'kumagaya'")<app.indexOf("key:'chisuibashi'")&&app.indexOf("key:'chisuibashi'")<app.indexOf("key:'iwabuchi'"));
   assert.match(app,/let chartHours=120/);assert.match(app,/radarZoom:8/);assert.match(app,/\/api\/radar-tile/);
