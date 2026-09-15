@@ -14,11 +14,11 @@
 .status-card-source{pointer-events:none}
 .status-watermark{position:absolute;z-index:0;right:7px;top:50%;width:104px;height:104px;transform:translateY(-50%);opacity:.085;pointer-events:none;color:#6d7d8c}
 .status-watermark svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.status-watermark-image{width:108px;height:108px;opacity:.085}
-.status-watermark-image img{display:block;width:100%;height:100%;object-fit:contain;filter:grayscale(1) contrast(.92) brightness(.88)}
-.status-weather .status-watermark{color:#778694;right:8px;opacity:.082}
-.status-flood .status-watermark{color:#657f91;right:7px;opacity:.092}
-.status-evacuation .status-watermark{right:6px;opacity:.078}
+.status-watermark-image{width:108px;height:108px;opacity:.085;background:url('/evacuation-area-symbol.svg') center/contain no-repeat}
+.status-watermark-image img{display:none}
+.status-weather .status-watermark{color:#6d7d8c;right:8px;opacity:.085}
+.status-flood .status-watermark{color:#6d7d8c;right:7px;opacity:.085}
+.status-evacuation .status-watermark{color:#6d7d8c;right:6px;opacity:.085}
 
 .camera-group-heading{margin-top:18px}
 .camera-stations-grid{margin-top:7px}
