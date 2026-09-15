@@ -16,30 +16,35 @@ test('water summary returns selected station metadata and exact deltas',()=>{
   const now=Date.parse('2026-09-10T00:05:00Z'),d=summarizeWater(rows,STATIONS.kumagaya,now);
   assert.equal(d.station.key,'kumagaya');assert.equal(d.latest.value,2.3);assert.equal(d.delta10,.1);assert.equal(d.delta60,.3);assert.equal(d.chartMax,6)
 });
-test('v0.8 frontend has live flood indicator, one weather card, resilient X feeds and visual link cards',()=>{
-  const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8'),app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../dist/style.css',import.meta.url),'utf8'),flood=readFileSync(new URL('../dist/flood-forecast.js',import.meta.url),'utf8'),api=readFileSync(new URL('../api/flood-forecast.js',import.meta.url),'utf8'),icons=readFileSync(new URL('../dist/card-icons.js',import.meta.url),'utf8'),iconCss=readFileSync(new URL('../dist/card-icons.css',import.meta.url),'utf8');
+test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards and visual link cards',()=>{
+  const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8'),app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../dist/style.css',import.meta.url),'utf8'),ui=readFileSync(new URL('../dist/v08-ui.css',import.meta.url),'utf8'),flood=readFileSync(new URL('../dist/flood-forecast.js',import.meta.url),'utf8'),api=readFileSync(new URL('../api/flood-forecast.js',import.meta.url),'utf8'),icons=readFileSync(new URL('../dist/card-icons.js',import.meta.url),'utf8'),iconCss=readFileSync(new URL('../dist/card-icons.css',import.meta.url),'utf8');
+  assert.match(html,/<title>日暮里・荒川 水害情報ビューア<\/title>/);assert.match(html,/荒川の水位推移・雨雲・避難所・交通情報をひとまとめに/);
   assert.match(html,/bosai\/warning\/#area_type=class20s&amp;area_code=1311800/);
   assert.match(html,/pattern=default&amp;area_type=class20s&amp;area_code=1311800/);
   assert.match(html,/risk\/#zoom:12\/lat:35\.732021\/lon:139\.785919\/colordepth:normal\/elements:flood/);
   assert.match(html,/洪水キキクル/);
   assert.match(html,/表示期間切り替え/);assert.match(html,/data-range="120" class="active"/);
-  assert.match(html,/arajo\/index\.html/);assert.match(html,/arage\/index\.html/);assert.match(html,/river\.go\.jp\/index\/twninfo/);
+  assert.match(html,/arajo\/index\.html/);assert.match(html,/arage\/index\.html/);assert.match(html,/river\.go\.jp\/index\/twninfo/);assert.match(html,/kasen-suibo\.metro\.tokyo\.lg\.jp/);
   assert.match(html,/国土地理院（グレースケール・薄表示）/);assert.match(html,/60%表示/);
-  assert.match(html,/id="floodStatus"/);assert.match(html,/荒川｜氾濫情報/);assert.match(html,/flood-forecast\.js/);
-  assert(!html.includes('class="card forecast-card"'));
+  assert.match(html,/id="floodStatus"/);assert.match(html,/気象庁｜荒川の氾濫情報/);assert.match(html,/flood-forecast\.js/);
+  const weatherPos=html.indexOf('id="weatherStatus"'),floodPos=html.indexOf('id="floodStatus"'),evacPos=html.indexOf('id="evacStatus"');
+  assert.ok(weatherPos>=0&&weatherPos<floodPos&&floodPos<evacPos);
+  assert.equal((html.match(/class="status-watermark"/g)||[]).length,3);
+  for(const id of ['_dA2jB2NEZw','ec8nY1JZ6zA','pmTFyDvr4l4'])assert.match(html,new RegExp(id));
+  for(const tgid of ['226001','226008','203001'])assert.match(html,new RegExp('tgid='+tgid));
+  assert.equal((html.match(/youtube-nocookie\.com\/embed\//g)||[]).length,3);assert.equal((html.match(/camera-only-card/g)||[]).length,3);
   for(const handle of ['Kantei_Saigai','tokyo_bousai','arakawakukoho','mlit_arakawa_ka'])assert.match(html,new RegExp('x\\.com/'+handle));
-  assert.equal((html.match(/class="twitter-timeline"/g)||[]).length,4);assert.match(html,/platform\.x\.com\/widgets\.js/);
-  assert.equal((html.match(/class="social-heading-link"/g)||[]).length,4);assert(!html.includes('Xで開く →'));
-  assert.match(html,/表示されない場合も、各ヘッダーから公式アカウントを直接開けます/);
-  assert.match(html,/card-icons\.css/);assert.match(html,/card-icons\.js/);
+  assert.equal((html.match(/class="social-profile-card"/g)||[]).length,4);assert.equal((html.match(/https:\/\/unavatar\.io\/x\//g)||[]).length,4);
+  assert(!html.includes('twitter-timeline'));assert(!html.includes('platform.x.com/widgets.js'));
+  assert.match(html,/card-icons\.css/);assert.match(html,/card-icons\.js/);assert.match(html,/v08-ui\.css/);
   for(const mark of ['mark-jr','mark-metro','mark-keisei','mark-toei','mark-electric','mark-gas','mark-water','mark-sewer'])assert.match(icons,new RegExp(mark));
   assert.match(icons,/JR_East_logo\.svg/);assert.match(icons,/Tokyo_Metro_logo\.svg/);assert.match(icons,/Keisei_Electric_Railway_logo\.svg/);assert.match(icons,/Toei_Transportation_combined_logo\.svg/);
   assert.match(icons,/host\.endsWith\(`\.\$\{domain\}`\)/);assert.match(icons,/'jreast\.co\.jp'/);assert.match(icons,/fallbackTried/);
   assert.match(iconCss,/--mark-opacity/);assert.match(iconCss,/--mark-scale/);assert.match(iconCss,/mark-sewer/);
+  assert.match(ui,/status-watermark/);assert.match(ui,/camera-only-card/);assert.match(ui,/social-profile-card/);assert.match(ui,/filter:grayscale\(1\)/);assert.match(ui,/opacity:\.30/);assert.match(ui,/\.tile\.radar-tile\{opacity:\.60\}/);
   assert.match(html,/keisei\.co\.jp\/traininfo\/index\.php/);assert.match(html,/kotsu\.metro\.tokyo\.jp\/subway\//);
   assert.ok(app.indexOf("key:'kumagaya'")<app.indexOf("key:'chisuibashi'")&&app.indexOf("key:'chisuibashi'")<app.indexOf("key:'iwabuchi'"));
   assert.match(app,/let chartHours=120/);assert.match(app,/radarZoom:8/);assert.match(app,/\/api\/radar-tile/);
-  assert.match(css,/filter:grayscale\(1\)/);assert.match(css,/opacity:\.30/);assert.match(css,/\.tile\.radar-tile\{opacity:\.60\}/);assert.match(css,/social-grid\{display:grid;grid-template-columns:repeat\(4/);assert.match(css,/social-heading-link/);
   assert.match(flood,/\/api\/flood-forecast/);assert.match(api,/8303040001/);assert.match(api,/flood_xml\.json/);
   assert(!html.includes('id="shelters"'));assert(!html.includes('id="utilities"'))
 });
