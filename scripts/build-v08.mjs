@@ -10,11 +10,17 @@ rmSync(out,{recursive:true,force:true});
 mkdirSync(out,{recursive:true});
 cpSync(src,out,{recursive:true});
 
-// Keep the broader rainfall view used by the v0.8 preview without changing
-// the older canonical app logic yet.
+// Keep the broader rainfall view used by v0.8.
 const appPath=path.join(out,'app.js');
 let app=readFileSync(appPath,'utf8');
 app=app.replace("radarZoom:12","radarZoom:8");
 writeFileSync(appPath,app);
 
-console.log('Built v0.8 Nippori-Arakawa flood information viewer from canonical public sources.');
+// Production-facing release labels.
+const indexPath=path.join(out,'index.html');
+let html=readFileSync(indexPath,'utf8');
+html=html.replace('<span class="version">v0.8 preview</span>','<span class="version">v0.8</span>');
+html=html.replace('Prototype v0.8 / 2026-09-15。Google Sitesはまだ置き換えません。','v0.8 / 2026-09-16');
+writeFileSync(indexPath,html);
+
+console.log('Built v0.8 Nippori-Arakawa flood information viewer for production.');
