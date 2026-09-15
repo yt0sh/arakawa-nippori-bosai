@@ -17,7 +17,7 @@ test('water summary returns selected station metadata and exact deltas',()=>{
   assert.equal(d.station.key,'kumagaya');assert.equal(d.latest.value,2.3);assert.equal(d.delta10,.1);assert.equal(d.delta60,.3);assert.equal(d.chartMax,6)
 });
 test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards and visual link cards',()=>{
-  const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8'),app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../dist/style.css',import.meta.url),'utf8'),ui=readFileSync(new URL('../dist/v08-ui.css',import.meta.url),'utf8'),flood=readFileSync(new URL('../dist/flood-forecast.js',import.meta.url),'utf8'),api=readFileSync(new URL('../api/flood-forecast.js',import.meta.url),'utf8'),icons=readFileSync(new URL('../dist/card-icons.js',import.meta.url),'utf8'),iconCss=readFileSync(new URL('../dist/card-icons.css',import.meta.url),'utf8');
+  const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8'),app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../dist/style.css',import.meta.url),'utf8'),ui=readFileSync(new URL('../dist/v08-ui.css',import.meta.url),'utf8'),flood=readFileSync(new URL('../dist/flood-forecast.js',import.meta.url),'utf8'),api=readFileSync(new URL('../api/flood-forecast.js',import.meta.url),'utf8'),icons=readFileSync(new URL('../dist/card-icons.js',import.meta.url),'utf8'),iconCss=readFileSync(new URL('../dist/card-icons.css',import.meta.url),'utf8'),evacSvg=readFileSync(new URL('../dist/evacuation-area-symbol.svg',import.meta.url),'utf8');
   assert.match(html,/<title>日暮里・荒川 水害情報ビューア<\/title>/);assert.match(html,/荒川の水位推移・雨雲・避難所・交通情報をひとまとめに/);
   assert.match(html,/bosai\/warning\/#area_type=class20s&amp;area_code=1311800/);
   assert.match(html,/pattern=default&amp;area_type=class20s&amp;area_code=1311800/);
@@ -32,8 +32,9 @@ test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards an
   assert.equal((html.match(/class="status-card status-visual status-card-link/g)||[]).length,3);
   assert.equal((html.match(/class="status-watermark/g)||[]).length,3);
   assert.match(html,/M10\.363 3\.591l-8\.106 13\.534/);assert.match(html,/M3 20\.75a2\.4 2\.4/);
-  assert.match(html,/Safety_evacuation_area\.svg/);assert.match(html,/JIS Z8210、表示色調整/);
-  assert.match(ui,/status-card-link/);assert.match(ui,/status-watermark-image/);assert.match(ui,/grayscale\(1\)/);
+  assert.match(ui,/evacuation-area-symbol\.svg/);assert.match(ui,/status-watermark-image img\{display:none\}/);
+  assert.equal((evacSvg.match(/<path /g)||[]).length,3);assert.match(evacSvg,/viewBox="0 0 48\.364933 48\.374404"/);assert.match(evacSvg,/fill="#6d7d8c"/);assert(!evacSvg.includes('<clipPath'));assert(!evacSvg.includes('#000000'));
+  assert.match(ui,/\.status-weather \.status-watermark\{color:#6d7d8c/);assert.match(ui,/\.status-flood \.status-watermark\{color:#6d7d8c/);assert.match(ui,/\.status-evacuation \.status-watermark\{color:#6d7d8c/);
   for(const id of ['_dA2jB2NEZw','ec8nY1JZ6zA','pmTFyDvr4l4'])assert.match(html,new RegExp(id));
   for(const tgid of ['226001','226008','203001'])assert.match(html,new RegExp('tgid='+tgid));
   assert.equal((html.match(/youtube-nocookie\.com\/embed\//g)||[]).length,3);assert.equal((html.match(/camera-only-card/g)||[]).length,3);
